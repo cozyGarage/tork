@@ -1,0 +1,10 @@
+FROM golang:1.25-alpine AS build
+WORKDIR /src
+COPY . .
+RUN CGO_ENABLED=0 go build -o /tork cmd/main.go
+
+FROM alpine:3.20
+RUN apk add --no-cache curl ca-certificates tzdata bash
+COPY --from=build /tork /usr/local/bin/tork
+ENTRYPOINT ["tork"]
+CMD ["run", "standalone"]

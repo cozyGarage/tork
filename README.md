@@ -31,6 +31,8 @@
 
 Tork is a highly-scalable, general-purpose workflow engine. It lets you define jobs consisting of multiple tasks, each running inside its own container. You can run Tork on a single machine (standalone mode) or set it up in a distributed environment with multiple workers.
 
+> **Fork policy (cozyGarage):** Go module path stays `github.com/runabol/tork` for now. `main` tracks upstream (fast-forward only). Our changes live on **`fork/main`**. Sync weekly: `git fetch upstream && git log --oneline main..upstream/main`, then merge or cherry-pick into `fork/main`.
+
 ## Features
 
 ![tork CLI](docs/cli_v3.jpg)

@@ -1,4 +1,6 @@
-# Build Dockerfile.fork on GitHub Actions → push to GHCR.
+# If CI push fails with `write_package`: repo Settings → Actions → General →
+# Workflow permissions → **Read and write permissions**. Or add org secret
+# `GHCR_TOKEN` (PAT with write:packages) and use it in docker-fork.yml instead of GITHUB_TOKEN.
 # VPS never compiles Go — only `docker compose pull`.
 name: Docker fork image
 
@@ -45,7 +47,7 @@ jobs:
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: docker/build-push-action@v6
@@ -54,16 +56,17 @@ jobs:
           file: Dockerfile.fork
           push: true
           platforms: linux/amd64
+          provenance: false
           tags: |
-            ghcr.io/cozygarage/tork:${{ steps.meta.outputs.tag }}
-            ghcr.io/cozygarage/tork:fork-main
+            ghcr.io/${{ github.repository_owner }}/tork:${{ steps.meta.outputs.tag }}
+            ghcr.io/${{ github.repository_owner }}/tork:fork-main
 
       - name: Summary
         run: |
           {
             echo "### Published"
-            echo "- \`ghcr.io/cozygarage/tork:${{ steps.meta.outputs.tag }}\`"
-            echo "- \`ghcr.io/cozygarage/tork:fork-main\` (rolling latest on fork/main)"
+            echo "- \`ghcr.io/${{ github.repository_owner }}/tork:${{ steps.meta.outputs.tag }}\`"
+            echo "- \`ghcr.io/${{ github.repository_owner }}/tork:fork-main\` (rolling latest on fork/main)"
             echo ""
             echo "VPS: set \`TORK_IMAGE_TAG\` in \`/opt/automation/tork/.env\`, then pull + up."
           } >> "$GITHUB_STEP_SUMMARY"

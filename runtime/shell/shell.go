@@ -177,6 +177,12 @@ func (r *ShellRuntime) doRun(ctx context.Context, t *tork.Task, logger io.Writer
 	if err := os.WriteFile(fmt.Sprintf("%s/entrypoint", workdir), []byte(t.Run), 0555); err != nil {
 		return errors.Wrapf(err, "error writing the entrypoint")
 	}
+	if r.uid != DEFAULT_UID {
+		// ponytail: 0755 lets the dropped-privilege task traverse root-owned MkdirTemp; chown would be tighter
+		if err := os.Chmod(workdir, 0755); err != nil {
+			return errors.Wrapf(err, "error chmod workdir for non-root task")
+		}
+	}
 	args := append(r.shell, fmt.Sprintf("%s/entrypoint", workdir))
 	args = append([]string{"shell", "-uid", r.uid, "-gid", r.gid}, args...)
 	cmd := r.reexec(args...)
@@ -283,8 +289,8 @@ func reexecRun() {
 	flag.StringVar(&gid, "gid", "", "the gid to use when running the process")
 	flag.Parse()
 
-	SetUID(uid)
 	SetGID(gid)
+	SetUID(uid)
 
 	workdir := os.Getenv("WORKDIR")
 	if workdir == "" {

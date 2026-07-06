@@ -36,6 +36,7 @@ jobs:
         run: |
           BASE=$(grep 'Version' version.go | sed -n 's/.*"\([^"]*\)".*/\1/p')
           SHORT="${GITHUB_SHA::7}"
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
           if [ -n "${{ inputs.tag }}" ]; then
             TAG="${{ inputs.tag }}"
           else
@@ -43,6 +44,7 @@ jobs:
           fi
           echo "base=$BASE" >> "$GITHUB_OUTPUT"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "owner=$OWNER" >> "$GITHUB_OUTPUT"
 
       - uses: docker/login-action@v3
         with:
@@ -58,15 +60,15 @@ jobs:
           platforms: linux/amd64
           provenance: false
           tags: |
-            ghcr.io/${{ github.repository_owner }}/tork:${{ steps.meta.outputs.tag }}
-            ghcr.io/${{ github.repository_owner }}/tork:fork-main
+            ghcr.io/${{ steps.meta.outputs.owner }}/tork:${{ steps.meta.outputs.tag }}
+            ghcr.io/${{ steps.meta.outputs.owner }}/tork:fork-main
 
       - name: Summary
         run: |
           {
             echo "### Published"
-            echo "- \`ghcr.io/${{ github.repository_owner }}/tork:${{ steps.meta.outputs.tag }}\`"
-            echo "- \`ghcr.io/${{ github.repository_owner }}/tork:fork-main\` (rolling latest on fork/main)"
+            echo "- \`ghcr.io/${{ steps.meta.outputs.owner }}/tork:${{ steps.meta.outputs.tag }}\`"
+            echo "- \`ghcr.io/${{ steps.meta.outputs.owner }}/tork:fork-main\` (rolling latest on fork/main)"
             echo ""
             echo "VPS: set \`TORK_IMAGE_TAG\` in \`/opt/automation/tork/.env\`, then pull + up."
           } >> "$GITHUB_STEP_SUMMARY"

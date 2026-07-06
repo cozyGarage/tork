@@ -1,3 +1,4 @@
+# Fork image: built on GitHub Actions (docker-fork.yml), not on the VPS.
 FROM golang:1.25-alpine AS build
 WORKDIR /src
 COPY . .

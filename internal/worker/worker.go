@@ -16,6 +16,7 @@ import (
 
 	"github.com/runabol/tork/internal/host"
 	"github.com/runabol/tork/internal/syncx"
+	"github.com/runabol/tork/internal/fetchx"
 	"github.com/runabol/tork/runtime"
 
 	"github.com/runabol/tork/internal/uuid"
@@ -196,7 +197,15 @@ func (w *Worker) doRunTask(ctx context.Context, t *tork.Task) error {
 		rctx = tctx
 	}
 	// run the task
-	if err := w.runtime.Run(rctx, t); err != nil {
+	if t.Get != "" {
+		if err := w.doRunGetTask(rctx, t); err != nil {
+			finished := time.Now().UTC()
+			t.FailedAt = &finished
+			t.State = tork.TaskStateFailed
+			t.Error = err.Error()
+			return nil
+		}
+	} else if err := w.runtime.Run(rctx, t); err != nil {
 		finished := time.Now().UTC()
 		t.FailedAt = &finished
 		t.State = tork.TaskStateFailed
@@ -213,6 +222,37 @@ func (w *Worker) doRunTask(ctx context.Context, t *tork.Task) error {
 	finished := time.Now().UTC()
 	t.CompletedAt = &finished
 	t.State = tork.TaskStateCompleted
+	return nil
+}
+
+const defaultGetTimeout = 15 * time.Second
+
+var newFetchClient = func(attempts int, timeout time.Duration) *fetchx.Client {
+	return fetchx.NewClient(
+		fetchx.WithTimeout(timeout),
+		fetchx.WithMaxAttempts(attempts),
+	)
+}
+
+func (w *Worker) doRunGetTask(ctx context.Context, t *tork.Task) error {
+	attempts := 3
+	if t.Retry != nil && t.Retry.Limit > 0 {
+		attempts = t.Retry.Limit
+	}
+	timeout := defaultGetTimeout
+	if t.Timeout != "" {
+		dur, err := time.ParseDuration(t.Timeout)
+		if err != nil {
+			return errors.Wrapf(err, "invalid timeout duration: %s", t.Timeout)
+		}
+		timeout = dur
+	}
+	client := newFetchClient(attempts, timeout)
+	body, err := client.Get(ctx, t.Get)
+	if err != nil {
+		return err
+	}
+	t.Result = string(body)
 	return nil
 }
 

@@ -136,6 +136,7 @@ func validateQueue(fl validator.FieldLevel) bool {
 func taskInputValidation(sl validator.StructLevel) {
 	taskTypeValidation(sl)
 	compositeTaskValidation(sl)
+	regularTaskValidation(sl)
 }
 
 func taskTypeValidation(sl validator.StructLevel) {
@@ -198,5 +199,45 @@ func compositeTaskValidation(sl validator.StructLevel) {
 	}
 	if t.Timeout != "" {
 		sl.ReportError(t.Timeout, "timeout", "Timeout", "invalidcompositetask", "")
+	}
+	if t.Get != "" {
+		sl.ReportError(t.Get, "get", "Get", "invalidcompositetask", "")
+	}
+}
+
+func regularTaskValidation(sl validator.StructLevel) {
+	t := sl.Current().Interface().(Task)
+	if t.Parallel != nil || t.Each != nil || t.SubJob != nil {
+		return
+	}
+	kinds := 0
+	if t.Get != "" {
+		kinds++
+	}
+	if t.Run != "" {
+		kinds++
+	}
+	if t.Image != "" {
+		kinds++
+	}
+	if len(t.CMD) > 0 {
+		kinds++
+	}
+	if kinds == 0 {
+		sl.ReportError(t.Run, "run", "Run", "taskexecrequired", "")
+	}
+	if kinds > 1 {
+		if t.Get != "" {
+			sl.ReportError(t.Get, "get", "Get", "taskexecexclusive", "")
+		}
+		if t.Run != "" {
+			sl.ReportError(t.Run, "run", "Run", "taskexecexclusive", "")
+		}
+		if t.Image != "" {
+			sl.ReportError(t.Image, "image", "Image", "taskexecexclusive", "")
+		}
+		if len(t.CMD) > 0 {
+			sl.ReportError(t.CMD, "cmd", "CMD", "taskexecexclusive", "")
+		}
 	}
 }

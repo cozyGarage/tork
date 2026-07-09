@@ -31,6 +31,18 @@ func EvaluateTask(t *tork.Task, c map[string]any) error {
 		return err
 	}
 	t.Image = img
+	// evaluate get URL
+	getURL, err := EvaluateTemplate(t.Get, c)
+	if err != nil {
+		return err
+	}
+	t.Get = getURL
+	// evaluate run script
+	run, err := EvaluateTemplate(t.Run, c)
+	if err != nil {
+		return err
+	}
+	t.Run = run
 	// evaluate queue
 	q, err := EvaluateTemplate(t.Queue, c)
 	if err != nil {

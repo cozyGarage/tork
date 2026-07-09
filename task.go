@@ -47,6 +47,7 @@ type Task struct {
 	CMD         []string          `json:"cmd,omitempty"`
 	Entrypoint  []string          `json:"entrypoint,omitempty"`
 	Run         string            `json:"run,omitempty"`
+	Get         string            `json:"get,omitempty"`
 	Image       string            `json:"image,omitempty"`
 	Registry    *Registry         `json:"registry,omitempty"`
 	Env         map[string]string `json:"env,omitempty"`
@@ -200,6 +201,7 @@ func (t *Task) Clone() *Task {
 		CMD:         t.CMD,
 		Entrypoint:  t.Entrypoint,
 		Run:         t.Run,
+		Get:         t.Get,
 		Image:       t.Image,
 		Registry:    registry,
 		Env:         maps.Clone(t.Env),

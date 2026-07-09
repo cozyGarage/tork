@@ -11,6 +11,7 @@ type Task struct {
 	CMD         []string          `json:"cmd,omitempty" yaml:"cmd,omitempty"`
 	Entrypoint  []string          `json:"entrypoint,omitempty" yaml:"entrypoint,omitempty"`
 	Run         string            `json:"run,omitempty" yaml:"run,omitempty"`
+	Get         string            `json:"get,omitempty" yaml:"get,omitempty"`
 	Image       string            `json:"image,omitempty" yaml:"image,omitempty"`
 	Registry    *Registry         `json:"registry,omitempty" yaml:"registry,omitempty"`
 	Env         map[string]string `json:"env,omitempty" yaml:"env,omitempty"`
@@ -237,6 +238,7 @@ func (i Task) toTask() *tork.Task {
 		CMD:         i.CMD,
 		Entrypoint:  i.Entrypoint,
 		Run:         i.Run,
+		Get:         i.Get,
 		Image:       i.Image,
 		Registry:    registry,
 		Env:         i.Env,

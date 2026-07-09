@@ -135,7 +135,7 @@ func TestEvalIf(t *testing.T) {
 	assert.Equal(t, "true", t1.If)
 }
 
-func TestDontEvalRun(t *testing.T) {
+func TestEvalRun(t *testing.T) {
 	t1 := &tork.Task{
 		Run: "Hello {{ inputs.NAME }}",
 	}
@@ -145,7 +145,7 @@ func TestDontEvalRun(t *testing.T) {
 		},
 	})
 	assert.NoError(t, err)
-	assert.Equal(t, "Hello {{ inputs.NAME }}", t1.Run)
+	assert.Equal(t, "Hello world", t1.Run)
 }
 
 func TestEvalPre(t *testing.T) {

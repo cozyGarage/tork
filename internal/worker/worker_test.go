@@ -2,6 +2,8 @@ package worker
 
 import (
 	"context"
+	"net/http"
+	"net/http/httptest"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -9,6 +11,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/runabol/tork"
 	"github.com/runabol/tork/broker"
+	"github.com/runabol/tork/internal/fetchx"
 	"github.com/runabol/tork/internal/uuid"
 	"github.com/runabol/tork/middleware/task"
 	"github.com/runabol/tork/runtime/docker"
@@ -560,6 +563,46 @@ func (s *stubRuntime) Run(ctx context.Context, t *tork.Task) error {
 
 func (s *stubRuntime) HealthCheck(ctx context.Context) error {
 	return nil
+}
+
+func Test_handleTaskGet(t *testing.T) {
+	orig := newFetchClient
+	defer func() { newFetchClient = orig }()
+	newFetchClient = func(attempts int, timeout time.Duration) *fetchx.Client {
+		return fetchx.NewClient(
+			fetchx.WithTimeout(timeout),
+			fetchx.WithMaxAttempts(attempts),
+			fetchx.WithAllowHosts("127.0.0.1"),
+		)
+	}
+
+	b := broker.NewInMemoryBroker()
+	completions := make(chan any)
+	err := b.SubscribeForTasks(broker.QUEUE_COMPLETED, func(tk *tork.Task) error {
+		assert.Equal(t, "OK", tk.Result)
+		close(completions)
+		return nil
+	})
+	assert.NoError(t, err)
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte("OK"))
+	}))
+	defer srv.Close()
+
+	w, err := NewWorker(Config{
+		Broker:  b,
+		Runtime: &stubRuntime{},
+	})
+	assert.NoError(t, err)
+
+	err = w.handleTask(&tork.Task{
+		ID:    uuid.NewUUID(),
+		State: tork.TaskStateRunning,
+		Get:   srv.URL,
+	})
+	assert.NoError(t, err)
+	<-completions
 }
 
 func Test_handleTaskRunResultTooLarge(t *testing.T) {

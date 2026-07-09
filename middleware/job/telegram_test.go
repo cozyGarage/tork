@@ -18,6 +18,14 @@ import (
 
 type stubLogDS struct {
 	parts map[string][]*tork.TaskLogPart
+	jobs  map[string]*tork.Job
+}
+
+func (s *stubLogDS) GetJobByID(_ context.Context, id string) (*tork.Job, error) {
+	if j, ok := s.jobs[id]; ok {
+		return j, nil
+	}
+	return nil, datastore.ErrJobNotFound
 }
 
 func (s *stubLogDS) GetTaskLogParts(_ context.Context, taskID, _ string, page, size int) (*datastore.Page[*tork.TaskLogPart], error) {
@@ -118,6 +126,37 @@ func TestTelegramOnStatesExcludesFailed(t *testing.T) {
 	assert.Equal(t, int32(0), testTelegramMW(t, cfg, j))
 }
 
+func TestTelegramReloadsExecution(t *testing.T) {
+	var body string
+	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		b, _ := io.ReadAll(r.Body)
+		body = string(b)
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer svr.Close()
+
+	oldBase := telegramAPIBase
+	telegramAPIBase = svr.URL + "/bot%s/sendMessage"
+	defer func() { telegramAPIBase = oldBase }()
+
+	// Stale job like errorHandler passes: FAILED state but empty Execution.
+	stale := &tork.Job{
+		ID: "job-stale", Name: "stale-job", State: tork.JobStateFailed, Error: "exit 1",
+	}
+	full := &tork.Job{
+		ID: "job-stale", Name: "stale-job", State: tork.JobStateFailed,
+		Execution: []*tork.Task{{
+			ID: "task-1", Name: "real task", State: tork.TaskStateFailed, Error: "exit 1",
+		}},
+	}
+	ds := &stubLogDS{jobs: map[string]*tork.Job{"job-stale": full}}
+	cfg := TelegramConfig{Enabled: true, Token: "tok", ChatID: "123", OnStates: []string{"FAILED"}}
+	hm := ApplyMiddleware(NoOpHandlerFunc, []MiddlewareFunc{Telegram(ds, cfg)})
+	require.NoError(t, hm(context.Background(), StateChange, stale))
+	time.Sleep(100 * time.Millisecond)
+	assert.Contains(t, body, "real task")
+}
+
 func TestTelegramIncludesTaskNameAndLogTail(t *testing.T) {
 	var body string
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -131,10 +170,6 @@ func TestTelegramIncludesTaskNameAndLogTail(t *testing.T) {
 	telegramAPIBase = svr.URL + "/bot%s/sendMessage"
 	defer func() { telegramAPIBase = oldBase }()
 
-	ds := &stubLogDS{parts: map[string][]*tork.TaskLogPart{
-		"task-1": {{Contents: "line one\nline two\n"}},
-	}}
-	cfg := TelegramConfig{Enabled: true, Token: "tok", ChatID: "123", OnStates: []string{"FAILED"}, LogLines: 5}
 	j := &tork.Job{
 		ID:    "job-1",
 		Name:  "my-job",
@@ -146,6 +181,11 @@ func TestTelegramIncludesTaskNameAndLogTail(t *testing.T) {
 			Error: "boom",
 		}},
 	}
+	ds := &stubLogDS{
+		parts: map[string][]*tork.TaskLogPart{"task-1": {{Contents: "line one\nline two\n"}}},
+		jobs:  map[string]*tork.Job{"job-1": j},
+	}
+	cfg := TelegramConfig{Enabled: true, Token: "tok", ChatID: "123", OnStates: []string{"FAILED"}, LogLines: 5}
 	hm := ApplyMiddleware(NoOpHandlerFunc, []MiddlewareFunc{Telegram(ds, cfg)})
 	require.NoError(t, hm(context.Background(), StateChange, j))
 	time.Sleep(100 * time.Millisecond)

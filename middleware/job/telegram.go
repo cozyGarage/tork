@@ -31,12 +31,13 @@ type TelegramConfig struct {
 	LogLines int
 }
 
-type taskLogStore interface {
+type telegramStore interface {
+	GetJobByID(ctx context.Context, id string) (*tork.Job, error)
 	GetTaskLogParts(ctx context.Context, taskID, q string, page, size int) (*datastore.Page[*tork.TaskLogPart], error)
 }
 
 // Telegram sends a Telegram message when a job enters a configured state (default FAILED).
-func Telegram(ds taskLogStore, cfg TelegramConfig) MiddlewareFunc {
+func Telegram(ds telegramStore, cfg TelegramConfig) MiddlewareFunc {
 	if cfg.LogLines <= 0 {
 		cfg.LogLines = 10
 	}
@@ -55,6 +56,9 @@ func Telegram(ds taskLogStore, cfg TelegramConfig) MiddlewareFunc {
 				return nil
 			}
 			ft := failedTask(j)
+			if ft == nil && j.State == tork.JobStateFailed && j.Error != "" {
+				ft = &tork.Task{Name: "(pending reload)", Error: j.Error}
+			}
 			if ft == nil {
 				return nil
 			}
@@ -86,7 +90,14 @@ func failedTask(j *tork.Job) *tork.Task {
 	return nil
 }
 
-func sendTelegramAlert(ctx context.Context, ds taskLogStore, cfg TelegramConfig, j *tork.Job, ft *tork.Task) error {
+func sendTelegramAlert(ctx context.Context, ds telegramStore, cfg TelegramConfig, j *tork.Job, ft *tork.Task) error {
+	// ponytail: coordinator passes a stale job without Execution; reload after failJob commits.
+	if full, err := ds.GetJobByID(ctx, j.ID); err == nil {
+		if reloaded := failedTask(full); reloaded != nil {
+			j = full
+			ft = reloaded
+		}
+	}
 	text := buildTelegramMessage(ctx, ds, cfg, j, ft)
 	url := fmt.Sprintf(telegramAPIBase, cfg.Token)
 	body, err := json.Marshal(map[string]string{
@@ -114,7 +125,7 @@ func sendTelegramAlert(ctx context.Context, ds taskLogStore, cfg TelegramConfig,
 	return nil
 }
 
-func buildTelegramMessage(ctx context.Context, ds taskLogStore, cfg TelegramConfig, j *tork.Job, ft *tork.Task) string {
+func buildTelegramMessage(ctx context.Context, ds telegramStore, cfg TelegramConfig, j *tork.Job, ft *tork.Task) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "⚠️ Job failed: <b>%s</b>\n", escHTML(j.Name))
 	fmt.Fprintf(&b, "id: %s\n", escHTML(j.ID))
@@ -133,7 +144,7 @@ func buildTelegramMessage(ctx context.Context, ds taskLogStore, cfg TelegramConf
 	return text
 }
 
-func logTail(ctx context.Context, ds taskLogStore, taskID string, maxLines int) string {
+func logTail(ctx context.Context, ds telegramStore, taskID string, maxLines int) string {
 	if taskID == "" || maxLines <= 0 {
 		return ""
 	}

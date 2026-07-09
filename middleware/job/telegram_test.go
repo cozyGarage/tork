@@ -60,7 +60,7 @@ func testTelegramMW(t *testing.T, cfg TelegramConfig, j *tork.Job) int32 {
 	telegramAPIBase = svr.URL + "/bot%s/sendMessage"
 	t.Cleanup(func() { telegramAPIBase = oldBase })
 
-	hm := ApplyMiddleware(NoOpHandlerFunc, []MiddlewareFunc{Telegram(&stubLogDS{}, cfg)})
+	hm := ApplyMiddleware(NoOpHandlerFunc, []MiddlewareFunc{Telegram(&stubLogDS{jobs: map[string]*tork.Job{j.ID: j}}, cfg)})
 	require.NoError(t, hm(context.Background(), StateChange, j))
 	time.Sleep(100 * time.Millisecond)
 	return posts.Load()

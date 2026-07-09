@@ -14,6 +14,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/runabol/tork"
+	"github.com/runabol/tork/conf"
 	"github.com/runabol/tork/datastore"
 )
 
@@ -38,42 +39,71 @@ type telegramStore interface {
 
 // Telegram sends a Telegram message when a job enters a configured state (default FAILED).
 func Telegram(ds telegramStore, cfg TelegramConfig) MiddlewareFunc {
-	if cfg.LogLines <= 0 {
-		cfg.LogLines = 10
-	}
 	return func(next HandlerFunc) HandlerFunc {
 		return func(ctx context.Context, et EventType, j *tork.Job) error {
 			if err := next(ctx, et, j); err != nil {
 				return err
 			}
-			if !cfg.Enabled || cfg.Token == "" || cfg.ChatID == "" {
+			live := liveTelegramConfig(cfg)
+			if !live.Enabled || live.Token == "" || live.ChatID == "" {
 				return nil
 			}
-			if et != StateChange {
+			if et != StateChange || j == nil || j.ID == "" {
 				return nil
 			}
-			if !slices.Contains(cfg.OnStates, string(j.State)) {
+			if !slices.Contains(live.OnStates, string(j.State)) {
 				return nil
 			}
-			ft := failedTask(j)
-			if ft == nil && j.State == tork.JobStateFailed && j.Error != "" {
-				ft = &tork.Task{Name: "(pending reload)", Error: j.Error}
-			}
-			if ft == nil {
-				return nil
-			}
-			job := j
-			task := ft
+			jobID := j.ID
 			go func() {
 				sendCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 				defer cancel()
-				if err := sendTelegramAlert(sendCtx, ds, cfg, job, task); err != nil {
-					log.Info().Err(err).Msg("[Telegram] error sending job alert")
+				if err := sendTelegramForJob(sendCtx, ds, live, jobID); err != nil {
+					log.Info().Err(err).Str("job-id", jobID).Msg("[Telegram] error sending job alert")
+				} else {
+					log.Info().Str("job-id", jobID).Msg("[Telegram] sent job failure alert")
 				}
 			}()
 			return nil
 		}
 	}
+}
+
+func liveTelegramConfig(fallback TelegramConfig) TelegramConfig {
+	cfg := fallback
+	cfg.Enabled = conf.BoolDefault("middleware.job.telegram.enabled", fallback.Enabled)
+	if v := conf.String("middleware.job.telegram.token"); v != "" {
+		cfg.Token = v
+	}
+	if v := conf.String("middleware.job.telegram.chat_id"); v != "" {
+		cfg.ChatID = v
+	}
+	if states := conf.Strings("middleware.job.telegram.on_states"); len(states) > 0 {
+		cfg.OnStates = states
+	}
+	cfg.LogLines = conf.IntDefault("middleware.job.telegram.log_lines", fallback.LogLines)
+	if cfg.LogLines <= 0 {
+		cfg.LogLines = 10
+	}
+	return cfg
+}
+
+func sendTelegramForJob(ctx context.Context, ds telegramStore, cfg TelegramConfig, jobID string) error {
+	full, err := ds.GetJobByID(ctx, jobID)
+	if err != nil {
+		return err
+	}
+	if !slices.Contains(cfg.OnStates, string(full.State)) {
+		return nil
+	}
+	ft := failedTask(full)
+	if ft == nil && full.Error != "" {
+		ft = &tork.Task{Name: "(unknown task)", Error: full.Error}
+	}
+	if ft == nil {
+		return fmt.Errorf("no failed task for job %s", jobID)
+	}
+	return sendTelegramAlert(ctx, cfg, full, ft, ds)
 }
 
 func failedTask(j *tork.Job) *tork.Task {
@@ -90,14 +120,7 @@ func failedTask(j *tork.Job) *tork.Task {
 	return nil
 }
 
-func sendTelegramAlert(ctx context.Context, ds telegramStore, cfg TelegramConfig, j *tork.Job, ft *tork.Task) error {
-	// ponytail: coordinator passes a stale job without Execution; reload after failJob commits.
-	if full, err := ds.GetJobByID(ctx, j.ID); err == nil {
-		if reloaded := failedTask(full); reloaded != nil {
-			j = full
-			ft = reloaded
-		}
-	}
+func sendTelegramAlert(ctx context.Context, cfg TelegramConfig, j *tork.Job, ft *tork.Task, ds telegramStore) error {
 	text := buildTelegramMessage(ctx, ds, cfg, j, ft)
 	url := fmt.Sprintf(telegramAPIBase, cfg.Token)
 	body, err := json.Marshal(map[string]string{

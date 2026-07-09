@@ -71,13 +71,19 @@ func (e *Engine) initCoordinator() error {
 	cfg.Middleware.Task = append(cfg.Middleware.Task, task.Webhook(e.datastoreRef))
 
 	if conf.Bool("middleware.job.telegram.enabled") {
-		cfg.Middleware.Job = append(cfg.Middleware.Job, job.Telegram(e.datastoreRef, job.TelegramConfig{
+		tgCfg := job.TelegramConfig{
 			Enabled:  true,
 			Token:    conf.String("middleware.job.telegram.token"),
 			ChatID:   conf.String("middleware.job.telegram.chat_id"),
 			OnStates: conf.StringsDefault("middleware.job.telegram.on_states", []string{tork.JobStateFailed}),
 			LogLines: conf.IntDefault("middleware.job.telegram.log_lines", 10),
-		}))
+		}
+		if tgCfg.Token == "" || tgCfg.ChatID == "" {
+			log.Warn().Msg("[Telegram] enabled but token or chat_id missing — failure alerts will not send")
+		} else {
+			log.Info().Msg("[Telegram] failure alerts enabled")
+		}
+		cfg.Middleware.Job = append(cfg.Middleware.Job, job.Telegram(e.datastoreRef, tgCfg))
 	}
 
 	c, err := coordinator.NewCoordinator(cfg)

@@ -69,13 +69,21 @@ func Telegram(ds telegramStore, cfg TelegramConfig) MiddlewareFunc {
 	}
 }
 
+// TelegramChatID reads chat_id from config; koanf maps TORK_*_CHAT_ID to chat.id.
+func TelegramChatID(fallback string) string {
+	if v := conf.String("middleware.job.telegram.chat_id"); v != "" {
+		return v
+	}
+	return conf.StringDefault("middleware.job.telegram.chat.id", fallback)
+}
+
 func liveTelegramConfig(fallback TelegramConfig) TelegramConfig {
 	cfg := fallback
 	cfg.Enabled = conf.BoolDefault("middleware.job.telegram.enabled", fallback.Enabled)
 	if v := conf.String("middleware.job.telegram.token"); v != "" {
 		cfg.Token = v
 	}
-	if v := conf.String("middleware.job.telegram.chat_id"); v != "" {
+	if v := TelegramChatID(fallback.ChatID); v != "" {
 		cfg.ChatID = v
 	}
 	if states := conf.Strings("middleware.job.telegram.on_states"); len(states) > 0 {

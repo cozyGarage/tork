@@ -74,7 +74,7 @@ func (e *Engine) initCoordinator() error {
 		tgCfg := job.TelegramConfig{
 			Enabled:  true,
 			Token:    conf.String("middleware.job.telegram.token"),
-			ChatID:   conf.String("middleware.job.telegram.chat_id"),
+			ChatID:   job.TelegramChatID(""),
 			OnStates: conf.StringsDefault("middleware.job.telegram.on_states", []string{tork.JobStateFailed}),
 			LogLines: conf.IntDefault("middleware.job.telegram.log_lines", 10),
 		}

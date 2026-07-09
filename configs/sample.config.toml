@@ -96,7 +96,7 @@ enabled = false
 [middleware.job.telegram]
 enabled = false
 # token = ""       # or TORK_MIDDLEWARE_JOB_TELEGRAM_TOKEN
-# chat_id = ""     # or TORK_MIDDLEWARE_JOB_TELEGRAM_CHAT_ID
+# chat_id = ""     # or TORK_MIDDLEWARE_JOB_TELEGRAM_CHAT_ID (maps to chat.id in env)
 # on_states = ["FAILED"]
 # log_lines = 10
 

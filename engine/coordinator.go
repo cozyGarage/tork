@@ -70,6 +70,16 @@ func (e *Engine) initCoordinator() error {
 	cfg.Middleware.Job = append(cfg.Middleware.Job, job.Webhook)
 	cfg.Middleware.Task = append(cfg.Middleware.Task, task.Webhook(e.datastoreRef))
 
+	if conf.Bool("middleware.job.telegram.enabled") {
+		cfg.Middleware.Job = append(cfg.Middleware.Job, job.Telegram(e.datastoreRef, job.TelegramConfig{
+			Enabled:  true,
+			Token:    conf.String("middleware.job.telegram.token"),
+			ChatID:   conf.String("middleware.job.telegram.chat_id"),
+			OnStates: conf.StringsDefault("middleware.job.telegram.on_states", []string{tork.JobStateFailed}),
+			LogLines: conf.IntDefault("middleware.job.telegram.log_lines", 10),
+		}))
+	}
+
 	c, err := coordinator.NewCoordinator(cfg)
 	if err != nil {
 		return errors.Wrap(err, "error creating the coordinator")

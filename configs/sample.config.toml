@@ -92,6 +92,14 @@ enabled = false
 # patterns = ["*SECRET*"]       # key patterns to redact (wildcards supported)
 # exclude.patterns = ["*_PUBLIC"] # key patterns to skip redacting
 
+# global job failure alerts (replaces per-job n8n webhooks when enabled)
+[middleware.job.telegram]
+enabled = false
+# token = ""       # or TORK_MIDDLEWARE_JOB_TELEGRAM_TOKEN
+# chat_id = ""     # or TORK_MIDDLEWARE_JOB_TELEGRAM_CHAT_ID
+# on_states = ["FAILED"]
+# log_lines = 10
+
 [middleware.task.hostenv]
 vars = [
 ] # list of host env vars to inject into tasks, supports aliases (e.g. SOME_HOST_VAR:OTHER_VAR)

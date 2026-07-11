@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/broker"
-	"github.com/runabol/tork/datastore/postgres"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/broker"
+	"github.com/cozyGarage/transformer/datastore/postgres"
 
 	"github.com/stretchr/testify/assert"
 )

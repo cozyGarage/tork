@@ -3,7 +3,7 @@ package hash_test
 import (
 	"testing"
 
-	"github.com/runabol/tork/internal/hash"
+	"github.com/cozyGarage/transformer/internal/hash"
 	"github.com/stretchr/testify/assert"
 )
 

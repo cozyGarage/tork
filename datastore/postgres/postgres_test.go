@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/db/postgres"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/db/postgres"
 
-	"github.com/runabol/tork/internal/fns"
-	"github.com/runabol/tork/internal/uuid"
+	"github.com/cozyGarage/transformer/internal/fns"
+	"github.com/cozyGarage/transformer/internal/uuid"
 	"github.com/stretchr/testify/assert"
 )
 

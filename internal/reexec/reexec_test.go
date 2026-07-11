@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/runabol/tork/internal/fns"
+	"github.com/cozyGarage/transformer/internal/fns"
 	"gotest.tools/v3/assert"
 )
 

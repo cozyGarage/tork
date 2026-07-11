@@ -1,6 +1,6 @@
 # Makefile for building Tork
 GITCOMMIT:=$(shell git describe --dirty --always)
-BINARY:=./tmp/tork
+BINARY:=./tmp/transformer
 SYSTEM:=
 CHECKS:=check
 BUILDOPTS:=-v
@@ -12,7 +12,7 @@ CGO_ENABLED?=0
 all: tork
 
 tork: *.go go.* $(wildcard */**/*.go)
-	CGO_ENABLED=$(CGO_ENABLED) $(SYSTEM) go build $(BUILDOPTS) -ldflags="-s -w -X github.com/runabol/tork.GitCommit=$(GITCOMMIT)" -o $(BINARY) cmd/main.go
+	CGO_ENABLED=$(CGO_ENABLED) $(SYSTEM) go build $(BUILDOPTS) -ldflags="-s -w -X github.com/cozyGarage/transformer.GitCommit=$(GITCOMMIT)" -o $(BINARY) cmd/main.go
 
 .PHONY: clean
 clean:

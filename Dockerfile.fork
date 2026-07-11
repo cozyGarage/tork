@@ -1,13 +1,13 @@
-# Fork image: built on GitHub Actions (docker-fork.yml), not on the VPS.
+# Transformer fork image: built on GitHub Actions (docker-fork.yml), not on the VPS.
 FROM golang:1.25-alpine AS build
 WORKDIR /src
 COPY . .
-RUN CGO_ENABLED=0 go build -o /tork cmd/main.go
+RUN CGO_ENABLED=0 go build -o /transformer cmd/main.go
 
 FROM alpine:3.20
 RUN apk add --no-cache curl ca-certificates tzdata bash \
     && addgroup -g 1000 tork \
     && adduser -D -u 1000 -G tork tork
-COPY --from=build /tork /usr/local/bin/tork
-ENTRYPOINT ["tork"]
+COPY --from=build /transformer /usr/local/bin/transformer
+ENTRYPOINT ["transformer"]
 CMD ["run", "standalone"]

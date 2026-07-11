@@ -3,8 +3,8 @@ package task
 import (
 	"context"
 
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/internal/redact"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/internal/redact"
 )
 
 func Redact(redacter *redact.Redacter) MiddlewareFunc {

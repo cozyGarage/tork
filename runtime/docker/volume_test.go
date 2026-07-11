@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/docker/docker/api/types/volume"
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 	"github.com/stretchr/testify/assert"
 )
 

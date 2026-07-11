@@ -3,8 +3,8 @@ package engine
 import (
 	"testing"
 
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/datastore/postgres"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/datastore/postgres"
 	"github.com/stretchr/testify/assert"
 )
 

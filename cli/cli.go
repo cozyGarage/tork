@@ -3,8 +3,8 @@ package cli
 import (
 	"os"
 
-	"github.com/runabol/tork/internal/logging"
-	"github.com/runabol/tork/internal/reexec"
+	"github.com/cozyGarage/transformer/internal/logging"
+	"github.com/cozyGarage/transformer/internal/reexec"
 	ucli "github.com/urfave/cli/v2"
 )
 

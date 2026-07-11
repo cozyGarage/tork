@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/internal/wildcard"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/internal/wildcard"
 )
 
 const (

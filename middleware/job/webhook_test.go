@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/internal/webhook"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/internal/webhook"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 )
 
 type taskRecord struct {

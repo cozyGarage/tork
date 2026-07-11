@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/conf"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/datastore/postgres"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/conf"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/datastore/postgres"
 )
 
 type datastoreProxy struct {

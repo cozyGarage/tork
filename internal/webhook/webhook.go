@@ -8,8 +8,8 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/internal/fns"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/internal/fns"
 )
 
 const (

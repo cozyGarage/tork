@@ -7,7 +7,7 @@ import (
 
 	"github.com/expr-lang/expr"
 	"github.com/pkg/errors"
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 )
 
 var exprMatcher = regexp.MustCompile(`{{\s*(.+?)\s*}}`)

@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/pkg/errors"
-	"github.com/runabol/tork/conf"
+	"github.com/cozyGarage/transformer/conf"
 	ucli "github.com/urfave/cli/v2"
 )
 

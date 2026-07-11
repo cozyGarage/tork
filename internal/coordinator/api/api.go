@@ -16,19 +16,19 @@ import (
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 
-	"github.com/runabol/tork/broker"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/health"
+	"github.com/cozyGarage/transformer/broker"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/health"
 
-	"github.com/runabol/tork/input"
-	"github.com/runabol/tork/internal/hash"
-	"github.com/runabol/tork/internal/httpx"
-	"github.com/runabol/tork/middleware/job"
-	logmw "github.com/runabol/tork/middleware/log"
-	"github.com/runabol/tork/middleware/task"
-	"github.com/runabol/tork/middleware/web"
+	"github.com/cozyGarage/transformer/input"
+	"github.com/cozyGarage/transformer/internal/hash"
+	"github.com/cozyGarage/transformer/internal/httpx"
+	"github.com/cozyGarage/transformer/middleware/job"
+	logmw "github.com/cozyGarage/transformer/middleware/log"
+	"github.com/cozyGarage/transformer/middleware/task"
+	"github.com/cozyGarage/transformer/middleware/web"
 
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 
 	"gopkg.in/yaml.v3"
 )
@@ -79,7 +79,7 @@ type Middleware struct {
 // @contact.email contact@tork.run
 
 // @license.name MIT
-// @license.url https://github.com/runabol/tork/blob/main/LICENSE
+// @license.url https://github.com/cozyGarage/transformer/blob/main/LICENSE
 
 // @host localhost:8000
 // @BasePath /

@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/runabol/tork/engine"
+	"github.com/cozyGarage/transformer/engine"
 	ucli "github.com/urfave/cli/v2"
 )
 
 func (c *CLI) runCmd() *ucli.Command {
 	return &ucli.Command{
 		Name:      "run",
-		Usage:     "Run Tork",
+		Usage:     "Run Transformer",
 		UsageText: "tork run mode (standalone|coordinator|worker)",
 		Action:    c.run,
 	}

@@ -5,10 +5,10 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/broker"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/middleware/job"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/broker"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/middleware/job"
 )
 
 type cancelHandler struct {

@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/datastore/postgres"
-	"github.com/runabol/tork/internal/redact"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/datastore/postgres"
+	"github.com/cozyGarage/transformer/internal/redact"
 	"github.com/stretchr/testify/assert"
 )
 

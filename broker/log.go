@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 )
 
 // maxLogPartSize keeps each log part under PostgreSQL's tsvector input limit (~1 MiB).

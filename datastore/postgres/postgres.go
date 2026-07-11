@@ -13,12 +13,12 @@ import (
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/db/postgres"
-	"github.com/runabol/tork/internal/encrypt"
-	"github.com/runabol/tork/internal/slices"
-	"github.com/runabol/tork/internal/uuid"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/db/postgres"
+	"github.com/cozyGarage/transformer/internal/encrypt"
+	"github.com/cozyGarage/transformer/internal/slices"
+	"github.com/cozyGarage/transformer/internal/uuid"
 )
 
 type PostgresDatastore struct {

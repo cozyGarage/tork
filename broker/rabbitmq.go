@@ -13,10 +13,10 @@ import (
 	"github.com/pkg/errors"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/internal/fns"
-	"github.com/runabol/tork/internal/syncx"
-	"github.com/runabol/tork/internal/uuid"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/internal/fns"
+	"github.com/cozyGarage/transformer/internal/syncx"
+	"github.com/cozyGarage/transformer/internal/uuid"
 )
 
 const (

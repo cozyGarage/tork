@@ -16,11 +16,11 @@ import (
 	"github.com/docker/docker/api/types/image"
 	"github.com/rs/zerolog/log"
 
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 
-	"github.com/runabol/tork/broker"
-	"github.com/runabol/tork/internal/uuid"
-	"github.com/runabol/tork/runtime"
+	"github.com/cozyGarage/transformer/broker"
+	"github.com/cozyGarage/transformer/internal/uuid"
+	"github.com/cozyGarage/transformer/runtime"
 
 	"github.com/stretchr/testify/assert"
 )

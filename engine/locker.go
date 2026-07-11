@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/runabol/tork/conf"
-	"github.com/runabol/tork/locker"
+	"github.com/cozyGarage/transformer/conf"
+	"github.com/cozyGarage/transformer/locker"
 )
 
 func (e *Engine) initLocker() error {

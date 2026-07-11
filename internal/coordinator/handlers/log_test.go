@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/datastore/postgres"
-	"github.com/runabol/tork/internal/uuid"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/datastore/postgres"
+	"github.com/cozyGarage/transformer/internal/uuid"
 	"github.com/stretchr/testify/assert"
 )
 

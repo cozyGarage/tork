@@ -61,15 +61,15 @@ jobs:
           platforms: linux/amd64
           provenance: false
           tags: |
-            ghcr.io/${{ steps.meta.outputs.owner }}/tork:${{ steps.meta.outputs.tag }}
-            ghcr.io/${{ steps.meta.outputs.owner }}/tork:fork-main
+            ghcr.io/${{ steps.meta.outputs.owner }}/transformer:${{ steps.meta.outputs.tag }}
+            ghcr.io/${{ steps.meta.outputs.owner }}/transformer:fork-main
 
       - name: Summary
         run: |
           {
             echo "### Published"
-            echo "- \`ghcr.io/${{ steps.meta.outputs.owner }}/tork:${{ steps.meta.outputs.tag }}\`"
-            echo "- \`ghcr.io/${{ steps.meta.outputs.owner }}/tork:fork-main\` (rolling latest on fork/main)"
+            echo "- \`ghcr.io/${{ steps.meta.outputs.owner }}/transformer:${{ steps.meta.outputs.tag }}\`"
+            echo "- \`ghcr.io/${{ steps.meta.outputs.owner }}/transformer:fork-main\` (rolling latest on fork/main)"
             echo ""
             echo "VPS: set \`TORK_IMAGE_TAG\` in \`/opt/automation/tork/.env\`, then pull + up."
           } >> "$GITHUB_STEP_SUMMARY"

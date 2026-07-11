@@ -8,10 +8,10 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 
-	"github.com/runabol/tork/internal/syncx"
-	"github.com/runabol/tork/internal/wildcard"
+	"github.com/cozyGarage/transformer/internal/syncx"
+	"github.com/cozyGarage/transformer/internal/wildcard"
 )
 
 const defaultQueueSize = 1000

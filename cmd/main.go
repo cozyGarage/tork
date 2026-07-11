@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/runabol/tork/cli"
-	"github.com/runabol/tork/conf"
+	"github.com/cozyGarage/transformer/cli"
+	"github.com/cozyGarage/transformer/conf"
 )
 
 func main() {

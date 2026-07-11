@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 )
 
 const (

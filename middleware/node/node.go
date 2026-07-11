@@ -3,7 +3,7 @@ package node
 import (
 	"context"
 
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 )
 
 type HandlerFunc func(context.Context, *tork.Node) error

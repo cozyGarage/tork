@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/runabol/tork/conf"
+	"github.com/cozyGarage/transformer/conf"
 	"github.com/stretchr/testify/assert"
 )
 

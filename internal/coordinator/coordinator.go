@@ -9,23 +9,23 @@ import (
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
 
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/internal/coordinator/api"
-	"github.com/runabol/tork/internal/coordinator/handlers"
-	"github.com/runabol/tork/internal/host"
-	"github.com/runabol/tork/locker"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/internal/coordinator/api"
+	"github.com/cozyGarage/transformer/internal/coordinator/handlers"
+	"github.com/cozyGarage/transformer/internal/host"
+	"github.com/cozyGarage/transformer/locker"
 
-	"github.com/runabol/tork/input"
-	"github.com/runabol/tork/middleware/job"
-	logmw "github.com/runabol/tork/middleware/log"
-	"github.com/runabol/tork/middleware/node"
-	"github.com/runabol/tork/middleware/task"
-	"github.com/runabol/tork/middleware/web"
+	"github.com/cozyGarage/transformer/input"
+	"github.com/cozyGarage/transformer/middleware/job"
+	logmw "github.com/cozyGarage/transformer/middleware/log"
+	"github.com/cozyGarage/transformer/middleware/node"
+	"github.com/cozyGarage/transformer/middleware/task"
+	"github.com/cozyGarage/transformer/middleware/web"
 
-	"github.com/runabol/tork/broker"
+	"github.com/cozyGarage/transformer/broker"
 
-	"github.com/runabol/tork/internal/uuid"
+	"github.com/cozyGarage/transformer/internal/uuid"
 )
 
 // Coordinator is responsible for accepting tasks from

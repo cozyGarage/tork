@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/conf"
-	"github.com/runabol/tork/datastore"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/conf"
+	"github.com/cozyGarage/transformer/datastore"
 )
 
 // ponytail: telegramAPIBase is overridable in tests only.

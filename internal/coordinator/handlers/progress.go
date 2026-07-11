@@ -6,10 +6,10 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/middleware/job"
-	"github.com/runabol/tork/middleware/task"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/middleware/job"
+	"github.com/cozyGarage/transformer/middleware/task"
 )
 
 type progressHandler struct {

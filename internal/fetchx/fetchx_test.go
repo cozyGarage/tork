@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/runabol/tork/internal/fetchx"
+	"github.com/cozyGarage/transformer/internal/fetchx"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

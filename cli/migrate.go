@@ -3,10 +3,10 @@ package cli
 import (
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork/conf"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/datastore/postgres"
-	schema "github.com/runabol/tork/db/postgres"
+	"github.com/cozyGarage/transformer/conf"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/datastore/postgres"
+	schema "github.com/cozyGarage/transformer/db/postgres"
 	ucli "github.com/urfave/cli/v2"
 )
 

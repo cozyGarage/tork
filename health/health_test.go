@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/runabol/tork/health"
+	"github.com/cozyGarage/transformer/health"
 	"github.com/stretchr/testify/assert"
 )
 

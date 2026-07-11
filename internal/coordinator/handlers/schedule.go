@@ -8,11 +8,11 @@ import (
 	"github.com/go-co-op/gocron/v2"
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/broker"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/internal/uuid"
-	"github.com/runabol/tork/locker"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/broker"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/internal/uuid"
+	"github.com/cozyGarage/transformer/locker"
 )
 
 // minScheduledJobLockTTL is the minimum time a scheduled

@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/runabol/tork/broker"
-	"github.com/runabol/tork/internal/syncx"
-	"github.com/runabol/tork/runtime/docker"
+	"github.com/cozyGarage/transformer/broker"
+	"github.com/cozyGarage/transformer/internal/syncx"
+	"github.com/cozyGarage/transformer/runtime/docker"
 	"github.com/stretchr/testify/assert"
 )
 

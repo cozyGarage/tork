@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/datastore"
-	"github.com/runabol/tork/middleware/node"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/datastore"
+	"github.com/cozyGarage/transformer/middleware/node"
 )
 
 type heartbeatHandler struct {

@@ -3,7 +3,7 @@ package job
 import (
 	"context"
 
-	"github.com/runabol/tork"
+	"github.com/cozyGarage/transformer"
 )
 
 type EventType string

@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/internal/eval"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/internal/eval"
 	"github.com/stretchr/testify/assert"
 )
 

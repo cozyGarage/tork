@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/pkg/errors"
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/broker"
-	"github.com/runabol/tork/conf"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/broker"
+	"github.com/cozyGarage/transformer/conf"
 )
 
 type brokerProxy struct {

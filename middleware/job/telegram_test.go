@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/runabol/tork"
-	"github.com/runabol/tork/datastore"
+	"github.com/cozyGarage/transformer"
+	"github.com/cozyGarage/transformer/datastore"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

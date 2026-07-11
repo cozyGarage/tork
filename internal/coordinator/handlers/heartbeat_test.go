@@ -135,6 +135,12 @@ func (s *nodeStubDatastore) UpdateJob(context.Context, string, func(*tork.Job) e
 	return nil
 }
 func (s *nodeStubDatastore) GetJobByID(context.Context, string) (*tork.Job, error) { return nil, nil }
+func (s *nodeStubDatastore) GetJobSummaryByID(context.Context, string) (*tork.Job, error) {
+	return nil, nil
+}
+func (s *nodeStubDatastore) GetJobExecution(context.Context, string, int, int, string) (*datastore.Page[*tork.TaskSummary], error) {
+	return nil, nil
+}
 func (s *nodeStubDatastore) GetJobLogParts(context.Context, string, string, int, int) (*datastore.Page[*tork.TaskLogPart], error) {
 	return nil, nil
 }

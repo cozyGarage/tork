@@ -9,5 +9,6 @@ RUN apk add --no-cache curl ca-certificates tzdata bash \
     && addgroup -g 1000 tork \
     && adduser -D -u 1000 -G tork tork
 COPY --from=build /transformer /usr/local/bin/transformer
+COPY --from=build /src/LICENSE /LICENSE
 ENTRYPOINT ["transformer"]
 CMD ["run", "standalone"]

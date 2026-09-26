@@ -7,7 +7,7 @@ name: Docker fork image
 on:
   push:
     branches:
-      - fork/main
+      - main
     paths-ignore:
       - "**.md"
       - LICENSE
@@ -69,7 +69,7 @@ jobs:
           {
             echo "### Published"
             echo "- \`ghcr.io/${{ steps.meta.outputs.owner }}/transformer:${{ steps.meta.outputs.tag }}\`"
-            echo "- \`ghcr.io/${{ steps.meta.outputs.owner }}/transformer:fork-main\` (rolling latest on fork/main)"
+            echo "- \`ghcr.io/${{ steps.meta.outputs.owner }}/transformer:fork-main\` (rolling latest on main)"
             echo ""
             echo "VPS: set \`TORK_IMAGE_TAG\` in \`/opt/automation/tork/.env\`, then pull + up."
           } >> "$GITHUB_STEP_SUMMARY"

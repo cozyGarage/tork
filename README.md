@@ -31,7 +31,7 @@
 
 Tork is a highly-scalable, general-purpose workflow engine. It lets you define jobs consisting of multiple tasks, each running inside its own container. You can run Tork on a single machine (standalone mode) or set it up in a distributed environment with multiple workers.
 
-> **Transformer** (`github.com/cozyGarage/transformer`) — MIT fork of [Tork](https://github.com/runabol/tork) for the cozyGarage automation stack. Internal Go package name stays `tork` to keep upstream cherry-picks small. Branch **`fork/main`** is production; `main` tracks upstream (fast-forward only). Sync upstream weekly: `git fetch upstream && git log --oneline main..upstream/main`, then cherry-pick into `fork/main`. Image: `ghcr.io/cozygarage/transformer`.
+> **Transformer** (`github.com/cozyGarage/transformer`) — MIT fork of [Tork](https://github.com/runabol/tork) for the cozyGarage automation stack. Internal Go package name stays `tork` to keep upstream cherry-picks small. Branch **`main`** is production. Sync upstream by reviewing and cherry-picking changes into `main`. Image: `ghcr.io/cozygarage/transformer`.
 
 ## Features
 
